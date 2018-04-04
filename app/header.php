@@ -61,7 +61,7 @@ session_start();
                 <?php
                     if (isset($_SESSION['u_id']))
                     {
-                        echo '<span><a href="signout.php?logout"><i class="fa fa-sign-out"> Logout</i></a> <a href="profile.php"><i class="fa fa-user"> ' .$_SESSION['u_fname'].'</i></a></span>';
+                        echo '<span><a href="signout.php?logout"><i class="fa fa-sign-out"> Logout</i></a> <a href="profile.php?click_profile"><i class="fa fa-user"> ' .$_SESSION['u_fname'].'</i></a></span>';
                     }
                     else
                         {
@@ -122,15 +122,13 @@ session_start();
                         <ul class="dropdown-menu">
                             <li><a href="#">I tur</a></li>
                             <li><a href="#">II tur</a></li>
-
-
                         </ul>
                     </li>
 
                     <li class="dropdown dropdown-toggle">
                         <a href="#" data-toggle="dropdown">Others <i class="fa fa-angle-down"></i></a>
                         <ul class="dropdown-menu">
-                            <li><a href="IT-main.php">IT</a></li>
+                            <li><a href="it-main.php">IT</a></li>
                             <li><a href="Language-main.php">Language</a></li>
 
                         </ul>

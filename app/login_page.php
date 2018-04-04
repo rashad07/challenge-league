@@ -76,10 +76,10 @@ if(isset($_SESSION['login_success']))
         echo '<input style="color: black" class="form-control" name="username" id="username" type="text" value='.$value.' >';
 //        unset($_SESSION['username']);
     }
-    elseif (isset($_COOKIE['username']))
-    {
-        echo '<input style="color: blue" class="form-control" name="username" id="username" type="text" value='.$_COOKIE['username'].' >';
-    }
+//    elseif (isset($_COOKIE['username']))
+//    {
+//        echo '<input style="color: blue" class="form-control" name="username" id="username" type="text" value='.$_COOKIE['username'].' >';
+//    }
     else
         {
             echo '<input style="color: black" class="form-control" name="username" id="username" type="text" >';
@@ -100,10 +100,10 @@ if(isset($_SESSION['login_success']))
         echo '<input style="color: black" class="form-control" name="passwd" id="passwd" type="password" value='.$value.' >';
         unset($_SESSION['password']);
     }
-    elseif (isset($_COOKIE['password']))
-    {
-        echo '<input style="color: blue" class="form-control" name="passwd" id="passwd" type="password" value='.$_COOKIE['password'].' >';
-    }
+//    elseif (isset($_COOKIE['password']))
+//    {
+//        echo '<input style="color: blue" class="form-control" name="passwd" id="passwd" type="password" value='.$_COOKIE['password'].' >';
+//    }
     else
         {
             echo '<input style="color: black" class="form-control" name="passwd" id="passwd" type="password">';
