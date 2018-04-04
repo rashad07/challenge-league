@@ -144,15 +144,15 @@ if(isset($_SESSION['login_success']))
     <label style="color: white" for="birthday">Birthday<span style="color: #cb171e" class="required">*</span></label><br>
         <select class="form-control col-md-2" name='day' id='day' style="width: 75px; color: black">
         <option disabled selected value="Day">Day</option>
-        <option value='1'>1</option>
-        <option value='2'>2</option>
-        <option value='3'>3</option>
-        <option value='4'>4</option>
-        <option value='5'>5</option>
-        <option value='6'>6</option>
-        <option value='7'>7</option>
-        <option value='8'>8</option>
-        <option value='9'>9</option>
+        <option value='1'>01</option>
+        <option value='2'>02</option>
+        <option value='3'>03</option>
+        <option value='4'>04</option>
+        <option value='5'>05</option>
+        <option value='6'>06</option>
+        <option value='7'>07</option>
+        <option value='8'>08</option>
+        <option value='9'>09</option>
         <option value='10'>10</option>
         <option value='11'>11</option>
         <option value='12'>12</option>
@@ -178,15 +178,15 @@ if(isset($_SESSION['login_success']))
     </select>
     <select class="form-control col-md-2" name='month' id='month' style="width: 90px; color: black">
         <option disabled selected value="Month">Month</option>
-        <option value='1'>1</option>
-        <option value='2'>2</option>
-        <option value='3'>3</option>
-        <option value='4'>4</option>
-        <option value='5'>5</option>
-        <option value='6'>6</option>
-        <option value='7'>7</option>
-        <option value='8'>8</option>
-        <option value='9'>9</option>
+        <option value='1'>01</option>
+        <option value='2'>02</option>
+        <option value='3'>03</option>
+        <option value='4'>04</option>
+        <option value='5'>05</option>
+        <option value='6'>06</option>
+        <option value='7'>07</option>
+        <option value='8'>08</option>
+        <option value='9'>09</option>
         <option value='10'>10</option>
         <option value='11'>11</option>
         <option value='12'>12</option>
@@ -331,19 +331,19 @@ if(isset($_SESSION['login_success']))
 </div>
 </section>
 
-
-<div class="cta">
-<div class="container">
-<div class="row">
-<div class="col-md-8 col-sm-8">
-<h3>Learning Management System</h3>
-</div>
-<div class="col-md-4 col-sm-4">
-<a href="#" class="btn btn-border">Creat Account</a>
-</div>
-</div>
-</div>
-</div>
+<!---->
+<!--<div class="cta">-->
+<!--<div class="container">-->
+<!--<div class="row">-->
+<!--<div class="col-md-8 col-sm-8">-->
+<!--<h3>Learning Management System</h3>-->
+<!--</div>-->
+<!--<div class="col-md-4 col-sm-4">-->
+<!--<a href="#" class="btn btn-border">Creat Account</a>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
 
 
 <?php

@@ -96,7 +96,7 @@ if (isset($_POST['submit']))
                 $mail->Subject = 'Verify Your Email!';
                 $mail->Body    = "
                                Please click on the link below to verify your email:<br><br>
-                                <a href='http://localhost/challenge-league/app/confirmation.php?email=$email&token=$token'>Click Here</a>
+                                <a href='http://localhost:8080/challenge-league/app/confirmation.php?email=$email&token=$token'>Click Here</a>
                                 ";
 
 

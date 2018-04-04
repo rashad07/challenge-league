@@ -61,7 +61,7 @@ session_start();
                 <?php
                     if (isset($_SESSION['u_id']))
                     {
-                        echo '<span><a href="signout.php?logout"><i class="fa fa-user"> Logout</i></a></span>';
+                        echo '<span><a href="signout.php?logout"><i class="fa fa-sign-out"> Logout</i></a> <a href="profile.php"><i class="fa fa-user"> ' .$_SESSION['u_fname'].'</i></a></span>';
                     }
                     else
                         {
@@ -72,12 +72,6 @@ session_start();
 
         </div>
     </div>
-
-
-
-
-
-
 
 
     <nav class="navbar navbar-default main-navigation" role="navigation" data-spy="affix" data-offset-top="50">
