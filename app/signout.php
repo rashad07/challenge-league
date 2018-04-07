@@ -4,10 +4,10 @@ if (isset($_GET['logout'])) {
     session_unset();
     session_destroy();
 
-    header("Location: login_page.php?logout=success");
+    header("Location: login.php?logout=success");
 }
 else
     {
-        header("Location: login_page.php?logout=fail");
+        header("Location: login.php?logout=fail");
     }
 ?>

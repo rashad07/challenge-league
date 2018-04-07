@@ -2,7 +2,7 @@
 session_start();
 if (!isset($_GET['email']) || !isset($_GET['token']))
 {
-    header("Location: login_page.php");
+    header("Location: login.php");
     exit();
 }
 else
@@ -18,12 +18,12 @@ else
             $conn->query("Update users Set activated=1, token='' where email='$email'");
 
             $_SESSION['verification_success']='Your Email Has Been Verified! You Can Log In now!';
-            header("Location: login_page.php?msg=verification_success");
+            header("Location: login.php?msg=verification_success");
             exit();
         }
         else
             {
-                header("Location: login_page.php");
+                header("Location: login.php");
                 exit();
             }
 

@@ -14,14 +14,23 @@ if (isset($_POST['submit']))
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $c_password = mysqli_real_escape_string($conn, $_POST['c_password']);
 
+    $_SESSION['firstname']=$firstname;
+    $_SESSION['lastname']=$lastname;
+    $_SESSION['register_username']=$username;
+    $_SESSION['email']=$email;
+    $_SESSION['gender']=$gender;
+    $_SESSION['day']=$_POST['day'];
+    $_SESSION['month']=$_POST['month'];
+    $_SESSION['year']=$_POST['year'];
+
     if(empty($firstname) || empty($lastname) || empty($password) || empty($email) || empty($gender) || (empty($_POST['day']) && empty($_POST['month']) && empty($_POST['year']))){
-        header("Location: login_page.php?inputs=empty");
+        header("Location: register.php?inputs=empty");
         exit();
     }
     elseif ($c_password != $password)
     {
         $_SESSION['password_match'] = ' Password doesn\'t match';
-        header("Location: login_page.php?error=password_match");
+        header("Location: register.php?error=password_match");
         exit();
     }
     else {
@@ -36,7 +45,7 @@ if (isset($_POST['submit']))
         $usernamecheck = mysqli_num_rows($result);
         if($usernamecheck > 0){
             $_SESSION['exist_username'] = ' Username "'.$username.'" already exists'.'<br><br>';
-            header("Location: login_page.php?error=exist_username");
+            header("Location: register.php?error=exist_username");
             exit();
         }
         // check for unique username
@@ -44,21 +53,21 @@ if (isset($_POST['submit']))
         $result_e = mysqli_query($conn,$sql_e);
         $emailcheck = mysqli_num_rows($result_e);
         if($emailcheck > 0){
-            $_SESSION['exist_email'] = ' Email "'.$email.'" already exists'.'<br><br>';
-            header("Location: login_page.php?error=exist_email");
+            $_SESSION['exist_email'] = ' Email "'.$email.'" already exists! Try a new one!'.'<br><br>';
+            header("Location: register.php?error=exist_email");
             exit();
         }
         // check for correct password form
         if (strlen($password)<8 or ctype_lower($password) or ctype_upper($password) or ctype_alpha($password) or ctype_digit($password))
         {
             $_SESSION['pass_error'] = ' Password must be as follow!';
-            header("Location: login_page.php?error=pass_error");
+            header("Location: register.php?error=pass_error");
         }
 
 
         else {
             //getting token
-            $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789!/()$*';
+            $token = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789!/$*';
             $token = str_shuffle($token);
             $token = substr($token,0,10);
             //hashing the password
@@ -71,7 +80,7 @@ if (isset($_POST['submit']))
             $mail = new PHPMailer(true);                              // Passing `true` enables exceptions
             try {
                 //Server settings
-                $mail->SMTPDebug=2;
+//                $mail->SMTPDebug=4;
                 $mail->isSMTP();                                      // Set mailer to use SMTP
 //                $mail->SMTPOptions = array(
 //                    'ssl' => array(
@@ -82,13 +91,13 @@ if (isset($_POST['submit']))
 //                );
                 $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
                 $mail->SMTPAuth = true;                               // Enable SMTP authentication
-                $mail->Username = 'rshdmhdyv@gmail.com';                 // SMTP username
-                $mail->Password = 'resad3007';                           // SMTP password
-//                $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+                $mail->Username = 'challengeleague1@gmail.com';                 // SMTP username
+                $mail->Password = '684teamS';                           // SMTP password
+                $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
                 $mail->Port = 587;                                    // TCP port to connect to
 
                 //Recipients
-                $mail->setFrom('rshdmhdyv@gmail.com', 'Rashad Mehdiyev');
+                $mail->setFrom('challengeleague1@gmail.com', 'Challenge League');
                 $mail->addAddress($email, $firstname.' '.$lastname);     // Add a recipient
 
                 //Content
@@ -107,22 +116,29 @@ if (isset($_POST['submit']))
                 $sql = "Insert into users (firstname,lastname,username,email,gender,birthday,password,activated,token)
                                values('$firstname','$lastname','$username','$email','$gender','$birthday','$hashed_password',0,'$token')";
                 $result = mysqli_query($conn,$sql);
+                //making profile picture directory
+                $mk_sql = "Select username from users where username='$username' or email='$email'";
+                $mk_result = mysqli_query($conn, $mk_sql);
+                $row = mysqli_fetch_assoc($mk_result);
+                mkdir("images/users/".$row['username']);
+//----------------------------------------------------------------------------------------------------------------
+
                 $success_msg= 'You have been registered! Please check your email to verify account!';
                 $_SESSION['signup_success'] = $success_msg;
-                header('Location: login_page.php?signup=signup_success');
+                header('Location: login.php?signup=signup_success');
             }
             catch (Exception $e)
             {
                 $fail_msg='Something wrong happened! Message could not be sent.Please try again! ';
-                echo $mail->ErrorInfo;
+//                echo $mail->ErrorInfo;
                 $_SESSION['signup_fail'] = $fail_msg;
-                header('Location: login_page.php?signup=signup_fail');
+                header('Location: register.php?signup=signup_fail');
                 exit();
             }
 
             $_SESSION['username'] = $username;
             $_SESSION['password'] = $password;
-            header('Location: login_page.php?signup=signup_info');
+            header('Location: login.php?signup=signup_info');
             exit();
         }
 
@@ -130,7 +146,7 @@ if (isset($_POST['submit']))
 }
 else
     {
-        header('Location: login_page.php');
+        header('Location: login.php');
         exit();
     }
 

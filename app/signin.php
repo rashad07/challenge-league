@@ -15,13 +15,7 @@ if (isset($_POST['sub']))
     if (empty($uid) || empty($pwd))
     {
         $_SESSION['empty_error'] = ' Your need to fill in both fields! '.'<br><br>';
-        header("Location: login_page.php?login=empty");
-        exit();
-    }
-    elseif (mysqli_num_rows($activated)<1)
-    {
-        $_SESSION['empty_error'] = ' Your Account Hasn\'t Been Verified Yet!'.'<br><br>';
-        header("Location: login_page.php?login=empty");
+        header("Location: login.php?login=empty");
         exit();
     }
     else {
@@ -30,9 +24,16 @@ if (isset($_POST['sub']))
         $usernamecheck = mysqli_num_rows($result);
         if ($usernamecheck < 1) {
             $_SESSION['login_error'] = ' Username "' . $uid . '" doesn\'t exist';
-            header("Location: login_page.php?error=login_error");
+            header("Location: login.php?error=login_error");
             exit();
-        } else {
+        }
+        elseif (mysqli_num_rows($activated)<1)
+        {
+            $_SESSION['empty_error'] = ' Your Account Hasn\'t Been Verified Yet!'.'<br><br>';
+            header("Location: login.php?login=empty");
+            exit();
+        }
+        else {
             if ($row = mysqli_fetch_assoc($result))
             {
                 //De-hashing the password
@@ -40,7 +41,7 @@ if (isset($_POST['sub']))
                 if ($hashedPwdCheck == false)
                 {
                     $_SESSION['incorrect_password'] = ' The Password you typed doesn\'t match';
-                    header("Location: login_page.php?error=incorrect_password");
+                    header("Location: login.php?error=incorrect_password");
                     exit();
                 }
                 elseif ($hashedPwdCheck == true)
@@ -60,7 +61,7 @@ if (isset($_POST['sub']))
                     $_SESSION['u_bday'] = $row['birthday'];
                     $_SESSION['u_username'] = $row['username'];
                     $_SESSION['login_success'] = 'You Have Successfully Logged In' . '<br><br>';
-                    header("Location: login_page.php?login=login_success");
+                    header("Location: index-2.php?login=login_success");
                     exit();
                 }
             }

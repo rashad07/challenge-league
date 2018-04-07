@@ -1,12 +1,21 @@
 <?php
 include 'dbc.php';
 include 'header.php';
+if(isset($_SESSION['login_success']))
+{
+    echo '<div class="breadcrumb-wrapper" style="background-color: chartreuse" >';
+    echo '<h3 class="page-title"><i style="color: white">You Have Successfully Logged In</i></h3> ';
+    echo '</div>';
+    unset($_SESSION['login_success']);
+
+}
 ?>
 
 <html lang="en">
 
 
 <body>
+
 <div id="carousel-area">
 <div id="carousel-slider" class="carousel slide" data-interval="3000">
 

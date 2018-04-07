@@ -41,6 +41,9 @@ session_start();
 
     <link rel="stylesheet" type="text/css" href="assets/css/colors/sky.css" media="screen" />
 
+    <link rel="stylesheet" href="assets/css/exam.css" type="text/css">
+
+
 </head>
 
 
@@ -61,11 +64,11 @@ session_start();
                 <?php
                     if (isset($_SESSION['u_id']))
                     {
-                        echo '<span><a href="signout.php?logout"><i class="fa fa-sign-out"> Logout</i></a> <a href="profile.php?click_profile"><i class="fa fa-user"> ' .$_SESSION['u_fname'].'</i></a></span>';
+                        echo '<span><a href="signout.php?logout"><i class="fa fa-sign-out"> Logout</i></a> <a href="profile.php?id='.$_SESSION['u_username'].'"><i class="fa fa-user"> ' .$_SESSION['u_fname'].'</i></a></span>';
                     }
                     else
                         {
-                            echo '<span><a href="login_page.php"><i class="fa fa-user"></i> Login</a> / <a href="login_page.php">Register</a></span>';
+                            echo '<span><a href="login.php"><i class="fa fa-sign-in"></i> Login</a> / <a href="register.php">Register</a></span>';
                         }
                     ?>
             </div>
@@ -129,7 +132,7 @@ session_start();
                         <a href="#" data-toggle="dropdown">Others <i class="fa fa-angle-down"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href="it-main.php">IT</a></li>
-                            <li><a href="Language-main.php">Language</a></li>
+                            <li><a href="language-main.php">Language</a></li>
 
                         </ul>
                     </li>
@@ -191,7 +194,7 @@ session_start();
                         <li><a href="about.html">About Page</a></li>
                         <li><a href="gallery.html">Image Gallery</a></li>
                         <li><a href="faq.html">FAQ</a></li>
-                        <li><a href="login_page.php">Login Page</a></li>
+                        <li><a href="login.php">Login Page</a></li>
                         <li><a href="single-teacher.html">Single Teacher</a></li>
                         <li><a href="registration.html">Registration Form</a></li>
                         <li><a href="contact.php">Contacts</a></li>
