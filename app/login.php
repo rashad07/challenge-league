@@ -32,7 +32,13 @@ if(isset($_SESSION['verification_success']))
     echo '</div>';
     unset($_SESSION['verification_success']);
 }
-
+if(isset($_SESSION['password-update']) && $_SESSION['password-update']=="success")
+{
+    echo '<div class="breadcrumb-wrapper" style="background-color: chartreuse" >';
+    echo '<h3 class="page-title"><i style="color: white">The Password Was Successfully Updated! PLease Log In Again!</i></h3> ';
+    echo '</div>';
+    unset($_SESSION['password-update']);
+}
 
 ?>
 <section id="content">
@@ -104,7 +110,7 @@ if(isset($_SESSION['verification_success']))
 </div>
 <center>
     <button style="background-color: green" type="submit" id="sub" name="sub" class="btn btn-common">Login</button><br>
-    <a style="color: white" href="register.php">Create Account</a>
+    <a style="color: white" href="register.php"><u>Create New Account</u></a>
 </center>
 
 </form>

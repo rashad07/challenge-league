@@ -9,6 +9,13 @@ if(isset($_SESSION['login_success']))
     unset($_SESSION['login_success']);
 
 }
+if (isset($_SESSION['delete-account']) && $_SESSION['delete-account']=="success")
+{
+    echo '<div class="breadcrumb-wrapper" style="background-color: darkslategrey" >';
+    echo '<h3 class="page-title"><i style="color: white">Your Account Have Been Deleted :(</i></h3><a style="color: white" href="register.php"><u>Create New One</u></a> ';
+    echo '</div>';
+    unset($_SESSION['delete-account']);
+}
 ?>
 
 <html lang="en">

@@ -64,7 +64,12 @@ session_start();
                 <?php
                     if (isset($_SESSION['u_id']))
                     {
-                        echo '<span><a href="signout.php?logout"><i class="fa fa-sign-out"> Logout</i></a> <a href="profile.php?id='.$_SESSION['u_username'].'"><i class="fa fa-user"> ' .$_SESSION['u_fname'].'</i></a></span>';
+                        $u_id = $_SESSION['u_id'];
+                        include_once 'dbc.php';
+                        $sql = "Select * from users where id='$u_id'";
+                        $result = mysqli_query($conn,$sql);
+                        $row = mysqli_fetch_assoc($result);
+                        echo '<span><a href="signout.php?logout"><i class="fa fa-sign-out"> Logout</i></a> <a href="profile.php?id='.$row['username'].'"><i class="fa fa-user"> ' .$row['firstname'].'</i></a></span>';
                     }
                     else
                         {

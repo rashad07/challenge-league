@@ -10,7 +10,7 @@ if (isset($_POST['submit']))
     $username = mysqli_real_escape_string($conn, $_POST['uname']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $gender = mysqli_real_escape_string($conn, $_POST['gender']);
-    $birthday = $_POST['day'].'.'.$_POST['month'].'.'.$_POST['year'];
+    $birthday = $_POST['day'].'-'.$_POST['month'].'-'.$_POST['year'];
     $password = mysqli_real_escape_string($conn, $_POST['password']);
     $c_password = mysqli_real_escape_string($conn, $_POST['c_password']);
 
@@ -48,7 +48,7 @@ if (isset($_POST['submit']))
             header("Location: register.php?error=exist_username");
             exit();
         }
-        // check for unique username
+        // check for unique email
         $sql_e = "Select email from users where email='$email'";
         $result_e = mysqli_query($conn,$sql_e);
         $emailcheck = mysqli_num_rows($result_e);
@@ -117,15 +117,14 @@ if (isset($_POST['submit']))
                                values('$firstname','$lastname','$username','$email','$gender','$birthday','$hashed_password',0,'$token')";
                 $result = mysqli_query($conn,$sql);
                 //making profile picture directory
-                $mk_sql = "Select username from users where username='$username' or email='$email'";
-                $mk_result = mysqli_query($conn, $mk_sql);
-                $row = mysqli_fetch_assoc($mk_result);
-                mkdir("images/users/".$row['username']);
+                mkdir("images/users/".$username);
 //----------------------------------------------------------------------------------------------------------------
 
                 $success_msg= 'You have been registered! Please check your email to verify account!';
                 $_SESSION['signup_success'] = $success_msg;
                 header('Location: login.php?signup=signup_success');
+                $_SESSION['username'] = $username;
+                $_SESSION['password'] = $password;
             }
             catch (Exception $e)
             {
@@ -135,13 +134,7 @@ if (isset($_POST['submit']))
                 header('Location: register.php?signup=signup_fail');
                 exit();
             }
-
-            $_SESSION['username'] = $username;
-            $_SESSION['password'] = $password;
-            header('Location: login.php?signup=signup_info');
-            exit();
         }
-
     }
 }
 else
