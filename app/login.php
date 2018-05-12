@@ -1,6 +1,11 @@
 <?php
-include 'dbc.php';
 include 'header.php';
+if (isset($_SESSION['u_id'])) {
+
+    echo '<br><br><hr><center><span style="font-size: 26px">Please,Log Out for Log In!</span></center><hr><br><br>';
+    include 'footer.html';
+    exit();
+}
 ?>
 
 <div class="page-header" style="background: url(assets/img/banner1.jpg);">
@@ -39,12 +44,18 @@ if(isset($_SESSION['password-update']) && $_SESSION['password-update']=="success
     echo '</div>';
     unset($_SESSION['password-update']);
 }
-
+if(isset($_SESSION['deleted-account']))
+{
+    echo '<div class="breadcrumb-wrapper" style="background-color: red" >';
+    echo '<h3 class="page-title"><i style="color: white">'.$_SESSION['deleted-account'].'</i></h3> ';
+    echo '</div>';
+    unset($_SESSION['deleted-account']);
+}
 ?>
 <section id="content">
 <div class="container">
 <div class="row">
-<div style="background-color: #0a6ebd;left: 25%" class="col-md-6">
+<div style="background-color: #0a6ebd;left: 25%;border-radius: 30px" class="col-md-6">
 <center><h2 class="medium-title">Login</h2></center>
     <?php
     if (isset($_SESSION['empty_error']))
@@ -65,8 +76,8 @@ if(isset($_SESSION['password-update']) && $_SESSION['password-update']=="success
     }
     if (isset($_SESSION['username']))
     {
-        $value = $_SESSION['username'];
-        echo '<input style="color: black" class="form-control" name="username" id="username" type="text" value='.$value.' >';
+        $username = $_SESSION['username'];
+        echo '<input style="color: black" class="form-control" name="username" id="username" type="text" value='.$username.' >';
 //        unset($_SESSION['username']);
     }
 //    elseif (isset($_COOKIE['username']))
@@ -104,13 +115,14 @@ if(isset($_SESSION['password-update']) && $_SESSION['password-update']=="success
     ?>
 </div>
 <div class="form-group">
-<label style="color: white" for="rememberme" class="inline">
-<input name="rememberme" id="rememberme" type="checkbox">Remember me</label>
-<a style="color: white" href="#">Lost your password?</a>
+<label style="color: white;position:relative;left: 3px" for="rememberme" class="inline">
+<input style="transform: scale(1.5)" name="rememberme" id="rememberme" type="checkbox">Remember me
+</label>
+<a style="color: white;text-decoration: underline;float: right" href="forgotPassword.php">Lost your password?</a>
 </div>
 <center>
-    <button style="background-color: green" type="submit" id="sub" name="sub" class="btn btn-common">Login</button><br>
-    <a style="color: white" href="register.php"><u>Create New Account</u></a>
+    <button style="border-radius: 5px;background-color: green" type="submit" id="sub" name="sub" class="btn btn-common">Login</button><br>
+    <a style="color: white;text-decoration: underline;" href="register.php">Create New Account</a>
 </center>
 
 </form>

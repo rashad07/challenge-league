@@ -1,5 +1,5 @@
 <?php
-include 'dbc.php';
+
 include 'header.php';
 ?>
 <html lang="en">

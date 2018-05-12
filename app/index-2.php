@@ -1,5 +1,5 @@
 <?php
-include 'dbc.php';
+
 include 'header.php';
 if(isset($_SESSION['login_success']))
 {
@@ -50,7 +50,7 @@ Learn More
 <div class="carousel-caption">
 <p>Ready to Launch - School, College, University or Course Website</p>
 <h1>Innovation paradise<br> for Students</h1>
-<a class="btn btn-lg btn-common" href="contact.php">
+<a class="btn btn-lg btn-common" href="contact-page.php">
 <i class="fa fa-check">
 </i>
 Read More

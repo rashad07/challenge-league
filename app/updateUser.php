@@ -28,8 +28,9 @@ if (isset($_POST['submit']))
                                       gender = '$gender',
                                       birthday = '$birthday'
                                       Where id = '$u_id' ";
-            if($result = mysqli_query($conn,$sql))
+            if($result = @mysqli_query($conn,$sql))
             {
+                mysqli_close($conn);
                 $_SESSION['update']="success";
                 header("Location: profile.php?update=success");
                 exit();
@@ -61,46 +62,45 @@ if (isset($_POST['submit']))
                     $_SESSION['pass_error'] = 'rule_break';
                     header("Location: profile.php?pass_error=rule_break");
                 }
-                else
+                else{
+
+                    $sql = "Select * from users where id='$u_id'";
+                    if ($result = @mysqli_query($conn, $sql))
                     {
-
-                        $sql = "Select * from users where id='$u_id'";
-                        $result = mysqli_query($conn, $sql);
-
-                        if($row = mysqli_fetch_assoc($result))
-                        {
+                        if ($row = mysqli_fetch_assoc($result)) {
                             $hashedPwdCheck = password_verify($curr_pass, $row['password']);
-                            if ($hashedPwdCheck == false)
-                            {
+                            if ($hashedPwdCheck == false) {
                                 $_SESSION['pass_error'] = 'incorrect_password';
                                 header("Location: profile.php?pass_error=incorrect_password");
                                 exit();
-                            }
-                            elseif ($hashedPwdCheck == true)
-                            {
-                                if ($new_pass===$confirm_pass)
-                                {
+                            } elseif ($hashedPwdCheck == true) {
+                                if (password_verify($new_pass, $row['password'])) {
+                                    $_SESSION['pass_error'] = "sameness";
+                                    header("Location: profile.php?pass_error=sameness");
+                                    exit();
+                                }
+                                if ($new_pass === $confirm_pass) {
                                     $sql = "Update users Set password='$hashed_password' where id='$u_id' ";
-                                    if($result = mysqli_query($conn, $sql))
-                                    {
+                                    if ($result = @mysqli_query($conn, $sql)) {
                                         header("Location: signout.php?password-update=success");
                                         exit();
-                                    }
-                                    else{
+                                    } else {
                                         $_SESSION['password-update'] = 'fail';
                                         header("Location: profile.php?password-update=fail");
                                         exit();
                                     }
+                                } else {
+                                    $_SESSION['confirmation_error'] = 'confirm_password';
+                                    header("Location: profile.php?confirmation_error=confirm_password");
+                                    exit();
                                 }
-                                else
-                                    {
-                                        $_SESSION['confirmation_error'] = 'confirm_password';
-                                        header("Location: profile.php?confirmation_error=confirm_password");
-                                        exit();
-                                    }
                             }
                         }
                     }
+                    else{
+                        echo '<span style="font-size: 26px;color: red">Couldn\'t make connection to the database!</span>';
+                    }
+                }
             }
     }
     else

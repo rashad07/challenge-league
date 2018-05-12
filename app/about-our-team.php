@@ -100,8 +100,8 @@ include 'header.php';
 </div>
 </div>
 </div>
-
 </section>
+
 <?php
 include 'footer.html';
 ?>

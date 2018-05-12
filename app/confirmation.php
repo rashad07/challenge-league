@@ -7,7 +7,7 @@ if (!isset($_GET['email']) || !isset($_GET['token']))
 }
 else
     {
-        include 'dbc.php';
+        include_once 'dbc.php';
 
         $email = mysqli_real_escape_string($conn,$_GET['email']);
         $token = mysqli_real_escape_string($conn,$_GET['token']);
@@ -16,7 +16,7 @@ else
         if (mysqli_num_rows($sql)>0)
         {
             $conn->query("Update users Set activated=1, token='' where email='$email'");
-
+            mysqli_close($conn);
             $_SESSION['verification_success']='Your Email Has Been Verified! You Can Log In now!';
             header("Location: login.php?msg=verification_success");
             exit();

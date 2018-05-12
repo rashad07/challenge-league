@@ -1,5 +1,4 @@
 <?php
-include 'dbc.php';
 include 'header.php';
 ?>
 <html lang="en">
@@ -24,125 +23,39 @@ include 'header.php';
 	<div class="container">
 	<div class="row">
 
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-<div class="courses-wrap">
-<div class="thumb">
-<img src="assets/img/IT/img-java.jpg" alt="">
-<div class="courses-price">
-<p class="years">Java</p>
-</div>
-</div>
-<div class="course-detail-wrap">
-<div class="teacher-wrap">
-</div>
-<div class="course-content">
-<h3>JAVA</h3>
-<a href="#" class="btn btn-common btn-sm">Open</a>
-</div>
-</div>
-</div>
-</div>
-
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-<div class="courses-wrap">
-<div class="thumb">
-<img src="assets/img/IT/img-php.jpg" alt="">
-<div class="courses-price">
-<p class="years">PHP</p>
-</div>
-</div>
-<div class="course-detail-wrap">
-<div class="teacher-wrap">
-</div>
-<div class="course-content">
-<h3>PHP</h3>
-<a href="#" class="btn btn-common btn-sm">Open</a>
-</div>
-</div>
-</div>
-</div>
-
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-<div class="courses-wrap">
-<div class="thumb">
-<img src="assets/img/IT/img-oracle.jpg" alt="">
-<div class="courses-price">
-<p class="years">ORACLE</p>
-</div>
-</div>
-<div class="course-detail-wrap">
-<div class="teacher-wrap">
-</div>
-<div class="course-content">
-<h3>ORACLE</h3>
-<a href="#" class="btn btn-common btn-sm">Open</a>
-</div>
-</div>
-</div>
-</div>
-
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-<div class="courses-wrap">
-<div class="thumb">
-<img src="assets/img/IT/img-c++.jpg" alt="">
-<div class="courses-price">
-<p class="years">C++</p>
-</div>
-</div>
-<div class="course-detail-wrap">
-<div class="teacher-wrap">
-</div>
-<div class="course-content">
-<h3>C++</h3>
-<a href="#" class="btn btn-common btn-sm">Open</a>
-</div>
-</div>
-</div>
-</div>
-
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-<div class="courses-wrap">
-<div class="thumb">
-<img src="assets/img/IT/img-html.jpg" alt="">
-<div class="courses-price">
-<p class="years">HTML</p>
-</div>
-</div>
-<div class="course-detail-wrap">
-<div class="teacher-wrap">
-</div>
-<div class="course-content">
-<h3>HTML</h3>
-<a href="#" class="btn btn-common btn-sm">Open</a>
-</div>
-</div>
-</div>
-</div>
-
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-<div class="courses-wrap">
-<div class="thumb">
-<img src="assets/img/IT/img-css.jpg" alt="">
-<div class="courses-price">
-<p class="years">CSS</p>
-</div>
-</div>
-<div class="course-detail-wrap">
-<div class="teacher-wrap">
-</div>
-<div class="course-content">
-<h3>CSS</h3>
-<a href="#" class="btn btn-common btn-sm">Open</a>
-</div>
-</div>
-</div>
-</div>
+<?php
+include 'dbc.php';
+$sql = "Select * from pr_fields";
+if($result = @mysqli_query($conn,$sql)) {
+    mysqli_close($conn);
+    while ($field = mysqli_fetch_assoc($result)) {
+        echo '
+    <div class="col-md-4 col-sm-6 col-xs-12">
+    <div class="courses-wrap" style="border-radius: 10px">
+    <div class="thumb" style="border-radius: 5px">
+    <img src="assets/img/IT/img-' . $field["name"] . '.jpg" alt="">
+    <div class="courses-price">
+    <p class="years">' . $field["name"] . '</p>
+    </div>
+    </div>
+    <div class="course-detail-wrap">
+    <div class="teacher-wrap">
+    </div>
+    <div class="course-content">
+    <h3>' . strtoupper($field["name"]) . '</h3>
+    <a style="border-radius: 5px" href="pre-exam.php?fieldid=' . $field["id"] . '" class="btn btn-common btn-sm">Open</a>
+    </div>
+    </div>
+    </div>
+    </div>
+    ';
+    }
+}
+else
+{
+    echo '<span style="font-size: 26px;">Couldn\'t make connection to the database!</span>';
+}
+?>
 
 
 

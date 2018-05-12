@@ -1,23 +1,40 @@
 <?php
 include "header.php";
 
-if  ((isset($_GET['id']) && isset($_SESSION['u_username']) && $_GET['id']==$_SESSION['u_username'])
+if (isset($_SESSION['u_id'])) {
+    if ((isset($_GET['id']) && isset($_SESSION['u_username']) && $_GET['id'] == $_SESSION['u_username'])
         ||
-    (isset($_GET['media']) || isset($_GET['media-delete']) || isset($_GET['update']) || isset($_GET['inputs'])
-        || isset($_GET['pass_inputs']) || isset($_GET['pass_error']) || isset($_GET['password-update'])
-        || isset($_GET['confirmation_error']))
-    )
-    {
+        (isset($_GET['upload_media']) || isset($_GET['media-delete']) || isset($_GET['update']) || isset($_GET['inputs'])
+            || isset($_GET['pass_inputs']) || isset($_GET['pass_error']) || isset($_GET['password-update'])
+            || isset($_GET['confirmation_error']) || isset($_SESSION['delete-account']))
+    ) {
         include "dbc.php";
         $u_id = $_SESSION['u_id'];
         $sql = "Select * from users where id= '$u_id'";
-        $result = mysqli_query($conn,$sql);
+        if($result = @mysqli_query($conn, $sql))
+        {
         $row = mysqli_fetch_assoc($result);
-    }
-else{
-    echo '<script>window.location.href = "index-2.php?error=click_profile";</script>';
+            mysqli_close($conn);
+        }
+        else{
+            echo '<br><span style="font-size: 26px;">Couldn\'t make connection to the database!</span><br><br>';
+            include 'footer.html';
+            exit();
+        }
+    } else {
+        echo '<script>window.location.href = "index-2.php?error=click_profile";</script>';
 //    header("Location: index-2.php?error=click_profile");
 //    exit();
+    }
+}
+else{
+    echo '<br><br><center>
+            <span style="font-size: 26px;">There isn\'t any user in the session!</span><br>
+            <a href="login.php" style="text-decoration: underline">Log In Now</a>
+            </center><br><br>';
+    include 'footer.html';
+    exit();
+
 }
 ?>
 
@@ -45,48 +62,71 @@ elseif(isset($_SESSION['password-update']) && $_SESSION['password-update']=="fai
     echo '</div>';
     unset($_SESSION['password-update']);
 }
+elseif(isset($_SESSION['delete-account']) && $_SESSION['delete-account']=="fail")
+{
+    echo '<div class="breadcrumb-wrapper" style="background-color: red;height: 45px">';
+    echo '<h3 class="page-title"><i style="color: white">Account couldn\'t be deleted! Please try again!</i></h3> ';
+    echo '</div>';
+    unset($_SESSION['delete-account']);
+}
 ?>
 <section id="content">
 <div class="container">
     <div class="row">
-        <div class="col-md-12" style="background-color: lightgrey; border: inset">
-            <form enctype="multipart/form-data" action="media.php" method="post">
-            <div class="col-md-2 text-center" style="background-color: grey">
+        <div class="col-md-12" style="border-radius: 15px;background-color: #0a6ebd">
+            <form enctype="multipart/form-data" action="upload.php" method="post">
+            <div class="col-md-2 text-center" style="background-color: #67ae73">
                 <?php
                 $username = $_SESSION['u_username'];
-                $photo = $username.'-profile-photo';
-
-                if (file_exists("images/users/$username/$username-profile-photo"))
+                include "dbc.php";
+                $sql_media = "Select * from media where user_id ='$u_id' order by uploaded_at desc";
+                if($result_media =@mysqli_query($conn,$sql_media))
                 {
-                    echo
-                        '
-                    <div class="courses-wrap">
+                if (mysqli_num_rows($result_media)>0) {
+                    $row_media = mysqli_fetch_assoc($result_media);
+                    $imagename = $row_media['name'];
+                    $imagepath = "images/users/$username/$imagename";
+                    if (file_exists("images/users/$username/$imagename")) {
+                        echo
+                            '
+                    <div class="courses-wrap" style="border-radius: 10px;">
                     <div class="thumb" style="color: white">
-                    <center><img class="form-control" style="width: 200px; height: 200px;border-color: blue;" src="images/users/'.$username.'/'.$photo.'"></center>
+                    <center><img class="form-control" style="width: 200px; height: 200px;border-color: blue;" src="'.$imagepath.'"></center>
                     <div class="courses-price">
-                    <label style="color: white; background-color: blue;opacity:0.5;" class="fa fa-upload form-control" id="upload">Upload Picture<br>
-                    <input type="file" class="hidden" name="profile_image" id="profile_image">  
+                    <label style="cursor:pointer;color: white; background-color: blue;opacity:0.5;position:relative;bottom: 20px" class="fa fa-upload form-control" id="upload">Upload Picture<br>
+                    <input type="file" class="hidden" name="profile_image" onchange="getData(this.value)" id="profile_image">  
                     <i style="color: #e6db74">No more than 2MB</i>
                     </label>
+                    <a onclick="target_popup(this)" style="cursor:pointer;color: black;opacity:0.5;position: relative;bottom: 50px" class="form-control" >View Image</a>
                     </div>
                     </div>
                     </div>
                     <div style="position: relative;bottom: 55px;right: 0px;">
                     <a href="delete-media.php">
                     <u style="color: white;background-color: red">Delete Photo</u>
-                    </a>
-                    </div>';
+                    </a><br>
+                    
+                    </div>
+                    <script>
+                    function target_popup(form) {
+                        var imagepath = "'.$imagepath.'";
+                       window.open(imagepath, "formpopup", "width=1000,height=600,top=40,left=200,resizeable,scrollbars");
+                       form.target = "formpopup";
+                                       }
+                    </script>
+                    ';
+                    }
                 }
                 elseif($row['gender']=='male')
                     {
                         echo '
-                        <div class="courses-wrap">
-                        <div class="thumb" style="color: white">
+                        <div class="courses-wrap" style="border-radius: 10px;">
+                        <div class="thumb" style="color: white;">
                         <center><img class="form-control" style="width: 200px; height: 200px;border-color: blue" src="images/temporary/male.jpg"></center>
                         <div class="courses-price">
                         <label style="color: white; background-color: blue;opacity: 0.5" class="fa fa-upload form-control" id="upload">Upload Picture<br>
-                        <input type="file" class="hidden" name="profile_image" id="profile_image">
-                        <i style="color: #e6db74">No more than 2MB</i>
+                        <input type="file" class="hidden" name="profile_image" onchange="getData(this.value)" id="profile_image">
+                        <i style="color: #e6db74;text-decoration: underline">No more than 2MB</i>
                         </label>
                         </div>
                         </div>
@@ -106,7 +146,7 @@ elseif(isset($_SESSION['password-update']) && $_SESSION['password-update']=="fai
                 elseif($row['gender']=='female')
                 {
                     echo '
-                        <div class="courses-wrap">
+                        <div class="courses-wrap" style="border-radius: 10px;">
                         <div class="thumb" style="color: white">
                         <center><img class="form-control" style="width: 200px; height: 200px;border-color: blue" src="images/temporary/female.jpg"></center>
                         <div class="courses-price">
@@ -129,9 +169,28 @@ elseif(isset($_SESSION['password-update']) && $_SESSION['password-update']=="fai
                         </style>
                         ';
                 }
+                    mysqli_close($conn);
+                }
+                else{
+                    echo '<br><span style="font-size: 26px;color: white">Couldn\'t make connection to the database uploading photo!</span>';
+                }
                 ?>
-                <input class="fa fa-save text-center" type="submit" value="Upload" name="submit" style="color: white;background-color: green;width: 100px;height: 40px">
-                <br>
+
+                <input disabled="disabled" class="btn-common text-center" type="submit" value="Upload" id="submit_media" name="submit" style="border-radius: 5px;color: white;background-color: blue;width: 100px;height: 40px"><br>
+                <span style="color: white" id="imagename"></span>
+                <script>
+                    function getData(val) {
+                        var separator = ["\\"];
+                        var parts = val.split(separator[0]);
+                        var imagename = parts[parts.length - 1]; // Or parts.pop();
+                        document.getElementById("imagename").innerHTML = imagename;
+                        var upload = document.getElementById("submit_media");
+                        if (upload.disabled)
+                        {
+                            upload.disabled="";
+                        }
+                    }
+                </script>
                 <br>
                 <br>
                 <br>
@@ -141,10 +200,10 @@ elseif(isset($_SESSION['password-update']) && $_SESSION['password-update']=="fai
 
                 </div>
             </form>
-            <form action="UpdateUser.php" method="post">
-            <div class="col-md-10">
-                <h3 style="background-color: grey"><?php echo $row['firstname'];?>-Profile</h3>
-                <div class="col-md-6" style="background-color: grey;">
+            <form action="updateUser.php" method="post">
+            <div class="col-md-10" style="font-style: italic">
+                <h3 style="background-color: ;color: white;"><?php echo $row['firstname'];?>-Profile</h3>
+                <div class="col-md-6" >
                     <?php
                     if (isset($_SESSION['inputs']) && $_SESSION['inputs']=="empty")
                     {
@@ -152,17 +211,17 @@ elseif(isset($_SESSION['password-update']) && $_SESSION['password-update']=="fai
                         unset($_SESSION['inputs']);
                     }
                     ?>
-                    <button class="fa fa-edit btn btn-block" type="button" style=" background-color: #00a8ff;color: white;height: 30px" onclick="EditData()"> Edit Profile Details</button>
+                    <button class="fa fa-edit btn btn-block" type="button" style="border-radius: 5px;background-color: #4e5b6c;color: white;height: 30px;font-style: italic" onclick="editData()"> Edit Profile Details</button>
                     <?php echo '<b><pre>First Name  :   <input disabled="disabled" type="text" name="firstname" id="firstname" value='.$row['firstname'].' size="25px"></pre></b>';?>
                     <?php echo '<b><pre>Last Name   :   <input disabled="disabled" type="text" name="lastname" id="lastname" value='.$row['lastname'].' size="25px"></pre></b>';?>
                     <?php echo '<b><pre>Email       :   <input disabled="disabled" type="text" name="email" id="email" value='.$row['email'].' size="25px"></pre></b>';?>
                     <?php echo '<b><pre>Username    :   <input disabled="disabled" type="text" name="username" id="username" value='.$row['username'].' size="25px"></pre></b>';?>
                     <?php echo '<b><pre>Gender      :   <input disabled="disabled" type="text" name="gender" id="gender" value='.$row['gender'].' size="25px"></pre></b>';?>
-                    <?php echo '<b><pre style="height: 44px">Birthday    :   <input readonly disabled type="text" name="birthday" id="birthday" value='.$row['birthday'].' size="25px"> <input type="checkbox" onclick="EditBirth()" class="fa fa-edit"></pre></b>';?>
+                    <?php echo '<b><pre style="height: 44px">Birthday    :   <input readonly disabled type="text" name="birthday" id="birthday" value='.$row['birthday'].' size="25px"> <input type="checkbox" onclick="editBirth()" class="fa fa-edit"></pre></b>';?>
 <!--                    <label style="color: white;" id="change_pass">Change Password <input type="checkbox" onclick="show_hide()"></label>-->
                 </div>
-                <div class="col-md-6" style=" background-color: grey;" id="password_form">
-                    <input name="change_password" type="checkbox" onclick="EditPass()" style="transform: scale(1.5)"> <label style="color: white;">Change Password</label>
+                <div class="col-md-6" style=" background-color: ;" id="password_form">
+                    <input name="change_password" type="checkbox" onclick="editPass()" style="transform: scale(1.5)"> <label style="color: white;">Change Password</label>
                     <?php
                     if (isset($_SESSION['pass_inputs']) && $_SESSION['pass_inputs']=="empty")
                     {
@@ -195,6 +254,20 @@ elseif(isset($_SESSION['password-update']) && $_SESSION['password-update']=="fai
                                 </script>
                               ';
                     }
+                    if (isset($_SESSION['pass_error']) && $_SESSION['pass_error']=="sameness")
+                    {
+                        echo "\xe2\x9d\x8c".'<i style="color: #cb171e; background-color: white">Try a new Password!</i>';
+                        unset($_SESSION['pass_error']);
+                        echo '
+                                <script>
+                                    var curr_pass = document.getElementById("curr_pass");
+                                    var new_pass = document.getElementById("new_pass");
+                                    
+                                    curr_pass.style.borderColor = "red";
+                                    new_pass.style.borderColor = "red";
+                                </script>
+                              ';
+                    }
 
                     echo '<b><pre>Confirm New Password :   <input disabled type="password" name="confirm_pass" id="confirm_pass"></pre></b>';
                         if (isset($_SESSION['confirmation_error']) && $_SESSION['confirmation_error']=="confirm_password")
@@ -211,11 +284,11 @@ elseif(isset($_SESSION['password-update']) && $_SESSION['password-update']=="fai
 
                     ?>
 
-                    <p style="color: white">At least 8 chars,a uppercase,a lower case and a number or punctuation !!!</p>
+                    <p style="color: white">At least 8 chars including an uppercase,a lower case and a number or punctuation !!!</p>
                     <br>
                     <br>
                     <br>
-                    <button disabled="disabled" class="fa fa-save btn btn-primary" type="submit" name="submit" id="submit" style=" background-color: blue;float: right;height: 35px;"> Save</button>
+                    <button disabled="disabled" class="fa fa-save btn btn-success" type="submit" name="submit" id="submit" style="border-radius: 5px; background-color:  ;float: right;height: 37px;"> Save</button>
 
                 </div>
 
@@ -231,7 +304,7 @@ elseif(isset($_SESSION['password-update']) && $_SESSION['password-update']=="fai
 
     <script>
 
-        function EditData() {
+        function editData() {
             var firstname=document.getElementById("firstname");
             var lastname=document.getElementById("lastname");
             var gender=document.getElementById("gender");
@@ -248,7 +321,7 @@ elseif(isset($_SESSION['password-update']) && $_SESSION['password-update']=="fai
             }
         }
 
-        function EditPass() {
+        function editPass() {
             var curr_pass=document.getElementById("curr_pass");
             var new_pass=document.getElementById("new_pass");
             var confirm_pass=document.getElementById("confirm_pass");
@@ -268,7 +341,7 @@ elseif(isset($_SESSION['password-update']) && $_SESSION['password-update']=="fai
                     confirm_pass.disabled="disabled";
                 }
             }
-            function EditBirth() {
+            function editBirth() {
                 var birthday = document.getElementById("birthday");
                 if(birthday.type==="text" || birthday.readOnly)
                 {
